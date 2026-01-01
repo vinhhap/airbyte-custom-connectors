@@ -18,7 +18,7 @@ data:
   name: Microsoft Excel Online (SharePoint)
   definitionId: 3266628e-eef7-40f5-962b-cdecd6dd5075
   dockerRepository: qnguyen3496/airbyte-source-microsoft-excel-online
-  dockerImageTag: 0.1.4
+  dockerImageTag: 0.1.5
   documentationUrl: https://learn.microsoft.com/graph/api/resources/excel?view=graph-rest-1.0
   githubIssueLabel: source-microsoft-excel-online
   supportLevel: community
