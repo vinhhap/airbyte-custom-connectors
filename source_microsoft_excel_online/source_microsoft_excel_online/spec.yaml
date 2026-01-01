@@ -109,61 +109,71 @@ connectionSpecification:
       title: Workbooks
       description: List of Excel files/worksheets to sync. Each item becomes its own Airbyte stream.
       minItems: 1
+      default: []
       items:
         type: object
-        oneOf:
-          - title: SharePoint location
-            properties:
-              <<: *workbook_common
-              location_type:
-                const: sharepoint
-              sharepoint_hostname:
-                type: string
-                title: SharePoint hostname
-                description: "Example: contoso.sharepoint.com (no scheme)."
-                order: 10
-              sharepoint_site_path:
-                type: string
-                title: SharePoint site path
-                description: Either a server-relative site path (recommended) like /sites/MySite or /teams/MyTeam, OR just a site name like MySite (we'll try /sites/MySite and /teams/MySite).
-                order: 11
-              sharepoint_directory_path:
-                type: string
-                title: Directory path
-                description: Directory path inside the site's document library drive. You may include or omit a leading 'Documents/' or 'Shared Documents/' prefix.
-                order: 12
-              excel_file_name:
-                type: string
-                title: Excel file name
-                description: "Example: report.xlsx"
-                order: 13
-            required:
-              - location_type
-              - sharepoint_hostname
-              - sharepoint_site_path
-              - sharepoint_directory_path
-              - excel_file_name
-              - worksheet_name
-
-          - title: Microsoft Graph Drive/Item IDs (advanced)
-            properties:
-              <<: *workbook_common
-              location_type:
-                const: graph_ids
-              drive_id:
-                type: string
-                title: Drive ID
-                description: Microsoft Graph drive id.
-                group: advanced
-                order: 20
-              workbook_item_id:
-                type: string
-                title: Workbook item ID
-                description: Microsoft Graph drive item id for the workbook.
-                group: advanced
-                order: 21
-            required:
-              - location_type
-              - drive_id
-              - workbook_item_id
-              - worksheet_name
+        required:
+          - location_type
+          - worksheet_name
+        properties:
+          <<: *workbook_common
+          location_type:
+            type: string
+            title: Location type
+            description: Select how to locate the workbook.
+            enum:
+              - sharepoint
+              - graph_ids
+            default: sharepoint
+            order: 0
+          sharepoint_hostname:
+            type: string
+            title: SharePoint hostname
+            description: "Example: contoso.sharepoint.com (no scheme)."
+            order: 10
+          sharepoint_site_path:
+            type: string
+            title: SharePoint site path
+            description: Either a server-relative site path (recommended) like /sites/MySite or /teams/MyTeam, OR just a site name like MySite (we'll try /sites/MySite and /teams/MySite).
+            order: 11
+          sharepoint_directory_path:
+            type: string
+            title: Directory path
+            description: Directory path inside the site's document library drive. You may include or omit a leading 'Documents/' or 'Shared Documents/' prefix.
+            order: 12
+          excel_file_name:
+            type: string
+            title: Excel file name
+            description: "Example: report.xlsx"
+            order: 13
+          drive_id:
+            type: string
+            title: Drive ID
+            description: Microsoft Graph drive id.
+            group: advanced
+            order: 20
+          workbook_item_id:
+            type: string
+            title: Workbook item ID
+            description: Microsoft Graph drive item id for the workbook.
+            group: advanced
+            order: 21
+        allOf:
+          - if:
+              properties:
+                location_type:
+                  const: sharepoint
+            then:
+              required:
+                - sharepoint_hostname
+                - sharepoint_site_path
+                - sharepoint_directory_path
+                - excel_file_name
+          - if:
+              properties:
+                location_type:
+                  const: graph_ids
+            then:
+              required:
+                - drive_id
+                - workbook_item_id

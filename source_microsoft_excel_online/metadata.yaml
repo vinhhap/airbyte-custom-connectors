@@ -16,9 +16,10 @@ data:
   connectorType: source
   connectorSubtype: api
   name: Microsoft Excel Online (SharePoint)
+  icon: icon.svg
   definitionId: 3266628e-eef7-40f5-962b-cdecd6dd5075
   dockerRepository: qnguyen3496/airbyte-source-microsoft-excel-online
-  dockerImageTag: 0.1.5
+  dockerImageTag: 0.1.7
   documentationUrl: https://learn.microsoft.com/graph/api/resources/excel?view=graph-rest-1.0
   githubIssueLabel: source-microsoft-excel-online
   supportLevel: community

@@ -1,6 +1,6 @@
 [project]
 name = "source-microsoft-excel-online"
-version = "0.1.5"
+version = "0.1.7"
 description = ""
 authors = [
     {name = "Quan Nguyen",email = "quan.nn@ggg.com.vn"}
