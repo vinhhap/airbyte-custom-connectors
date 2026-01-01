@@ -1,0 +1,169 @@
+documentationUrl: https://learn.microsoft.com/graph/api/resources/excel?view=graph-rest-1.0
+supportsIncremental: false
+supportsNormalization: false
+supportsDBT: false
+advanced_auth: null
+
+connectionSpecification:
+  $schema: http://json-schema.org/draft-07/schema#
+  type: object
+  required:
+    - tenant_id
+    - client_id
+    - client_secret
+    - workbooks
+  definitions:
+    global_properties: &global_properties
+      tenant_id:
+        type: string
+        title: Tenant ID
+        description: Azure AD tenant (directory) ID.
+        order: 0
+      client_id:
+        type: string
+        title: Client ID
+        description: Azure AD application (client) ID.
+        order: 1
+      client_secret:
+        type: string
+        title: Client Secret
+        description: Azure AD application client secret.
+        airbyte_secret: true
+        order: 2
+      scopes:
+        type: array
+        items:
+          type: string
+        default:
+          - https://graph.microsoft.com/.default
+        title: MSAL scopes
+        group: advanced
+        order: 50
+      graph_base_url:
+        type: string
+        default: https://graph.microsoft.com/v1.0
+        title: Microsoft Graph base URL
+        group: advanced
+        order: 51
+      request_timeout_seconds:
+        type: number
+        title: Request timeout seconds
+        description: HTTP request timeout for Microsoft Graph calls.
+        group: advanced
+        default: 60
+        order: 60
+      max_retries:
+        type: integer
+        title: Max retries
+        description: Retries for rate-limited (429) and transient (5xx) Graph responses.
+        group: advanced
+        default: 5
+        minimum: 0
+        order: 61
+      initial_backoff_seconds:
+        type: number
+        title: Initial backoff seconds
+        description: Initial retry backoff delay.
+        group: advanced
+        default: 1.0
+        minimum: 0
+        order: 62
+      max_backoff_seconds:
+        type: number
+        title: Max backoff seconds
+        description: Maximum retry backoff delay.
+        group: advanced
+        default: 60.0
+        minimum: 0
+        order: 63
+
+    workbook_common: &workbook_common
+      worksheet_name:
+        type: string
+        title: Worksheet name
+        description: Name of the worksheet tab in the workbook.
+        order: 30
+      header_row:
+        type: integer
+        default: 1
+        minimum: 0
+        title: Header row index (1-based)
+        description: 1 means first row is headers; 0 means no headers (col_1, col_2, ...).
+        order: 31
+      range_address:
+        type: string
+        title: Optional range address (e.g., A1:D100)
+        description: If omitted, reads the worksheet usedRange(valuesOnly=true).
+        group: advanced
+        order: 52
+      stream_name:
+        type: string
+        title: Optional Airbyte stream name
+        description: Optional explicit Airbyte stream name for this workbook.
+        order: 40
+
+  properties:
+    <<: *global_properties
+    workbooks:
+      type: array
+      title: Workbooks
+      description: List of Excel files/worksheets to sync. Each item becomes its own Airbyte stream.
+      minItems: 1
+      items:
+        type: object
+        oneOf:
+          - title: SharePoint location
+            properties:
+              <<: *workbook_common
+              location_type:
+                const: sharepoint
+              sharepoint_hostname:
+                type: string
+                title: SharePoint hostname
+                description: "Example: contoso.sharepoint.com (no scheme)."
+                order: 10
+              sharepoint_site_path:
+                type: string
+                title: SharePoint site path
+                description: Either a server-relative site path (recommended) like /sites/MySite or /teams/MyTeam, OR just a site name like MySite (we'll try /sites/MySite and /teams/MySite).
+                order: 11
+              sharepoint_directory_path:
+                type: string
+                title: Directory path
+                description: Directory path inside the site's document library drive. You may include or omit a leading 'Documents/' or 'Shared Documents/' prefix.
+                order: 12
+              excel_file_name:
+                type: string
+                title: Excel file name
+                description: "Example: report.xlsx"
+                order: 13
+            required:
+              - location_type
+              - sharepoint_hostname
+              - sharepoint_site_path
+              - sharepoint_directory_path
+              - excel_file_name
+              - worksheet_name
+
+          - title: Microsoft Graph Drive/Item IDs (advanced)
+            properties:
+              <<: *workbook_common
+              location_type:
+                const: graph_ids
+              drive_id:
+                type: string
+                title: Drive ID
+                description: Microsoft Graph drive id.
+                group: advanced
+                order: 20
+              workbook_item_id:
+                type: string
+                title: Workbook item ID
+                description: Microsoft Graph drive item id for the workbook.
+                group: advanced
+                order: 21
+            required:
+              - location_type
+              - drive_id
+              - workbook_item_id
+              - worksheet_name

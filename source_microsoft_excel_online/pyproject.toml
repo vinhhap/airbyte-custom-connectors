@@ -1,0 +1,19 @@
+[project]
+name = "source-microsoft-excel-online"
+version = "0.1.5"
+description = ""
+authors = [
+    {name = "Quan Nguyen",email = "quan.nn@ggg.com.vn"}
+]
+readme = "README.md"
+requires-python = "<3.14,>=3.10"
+dependencies = [
+    "airbyte-cdk (>=7.6.1,<8.0.0)",
+    "msal (>=1.34.0,<2.0.0)",
+    "requests (>=2.31.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

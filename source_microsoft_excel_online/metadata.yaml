@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=.vscode/airbyte-connector-metadata.schema.json
+
+metadataSpecVersion: "1.0"
+
+data:
+  allowedHosts:
+    hosts:
+      - graph.microsoft.com
+      - login.microsoftonline.com
+  registryOverrides:
+    oss:
+      enabled: false
+    cloud:
+      enabled: false
+
+  connectorType: source
+  connectorSubtype: api
+  name: Microsoft Excel Online (SharePoint)
+  definitionId: 3266628e-eef7-40f5-962b-cdecd6dd5075
+  dockerRepository: qnguyen3496/airbyte-source-microsoft-excel-online
+  dockerImageTag: 0.1.4
+  documentationUrl: https://learn.microsoft.com/graph/api/resources/excel?view=graph-rest-1.0
+  githubIssueLabel: source-microsoft-excel-online
+  supportLevel: community
+  releaseStage: alpha
+  maxSecondsBetweenMessages: 7200
+  tags:
+    - "language:python"
+    - "keyword:excel"
+    - "keyword:sharepoint"
+    - "keyword:microsoft-graph"
+  connectorTestSuitesOptions:
+    - suite: unitTests
