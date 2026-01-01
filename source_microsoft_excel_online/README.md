@@ -196,5 +196,3 @@ High-level steps:
 2. In Airbyte, register a custom connector definition pointing at that image.
 3. Create a Source using the config JSON fields above.
 4. Create a Connection from this Source to your destination.
-
-> The exact registration method depends on how your Airbyte is deployed (Helm/Kubernetes vs docker-compose). If you tell me your deployment type, I can add the precise steps/manifest snippets.
